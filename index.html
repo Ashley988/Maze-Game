@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stirnraten-Spiel</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Startbildschirm: Spieleranzahl und Namen eingeben -->
+  <section id="setupScreen">
+    <h1>Stirnraten</h1>
+    <label for="playerCount">Anzahl der Spieler:</label>
+    <select id="playerCount">
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
+      <option value="9">9</option>
+      <option value="10">10</option>
+
+    </select>
+    <div id="nameInputs">
+      <!-- Namensfelder werden dynamisch erzeugt -->
+    </div>
+    <button id="startGameBtn">🎬 Spiel Starten</button>
+  </section>
+
+  <!-- Kategorie-Auswahl-Bildschirm -->
+  <section id="categoryScreen" class="hidden">
+    <h2 id="categoryPrompt"><!-- e.g. "Alice, wähle eine Kategorie:" wird via JS eingefügt --></h2>
+    <div id="categoryButtons">
+      <!-- Kategorie-Buttons werden dynamisch erzeugt -->
+    </div>
+  </section>
+
+  <!-- Countdown + Spiel-Runde Bildschirm -->
+  <section id="gameScreen" class="hidden">
+    <!-- Countdown-Anzeige -->
+    <div id="countdown" class="countdown"></div>
+    <!-- Timer und Wortanzeige -->
+    <div id="gamePlay" class="hidden">
+      <div id="timer" class="timer">1:00</div>
+      <div id="wordDisplay" class="word-display"><!-- aktuelles Wort --></div>
+      <div id="buttonsRow">
+        <button id="passBtn" class="game-btn pass-btn">Passen</button>
+        <button id="nextBtn" class="game-btn next-btn">Weiter</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Zwischen-Screen: nächste Person -->
+  <section id="nextPlayerScreen" class="hidden">
+    <h2>⏱️ Zeit um!</h2>
+    <button id="nextPlayerBtn">Weiter zur nächsten Person ➡️</button>
+  </section>
+
+  <!-- Endergebnis-Screen -->
+  <section id="resultScreen" class="hidden">
+    <h2>🏁 Endergebnis</h2>
+    <div id="scoreBoard">
+      <!-- Punkte-Tabelle wird dynamisch erzeugt -->
+    </div>
+    <button id="restartBtn">Neues Spiel</button>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+</html>
