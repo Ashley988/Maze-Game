@@ -1,125 +1,212 @@
-/* Grundlayout */
 body {
-  margin: 0;
-  padding: 20px;
-  background-color: #FFEB3B;  /* heller Gelbton Hintergrund */
-  color: #000;
-  font-family: "Comic Sans MS", "Comic Sans", cursive;  /* verspielte Schriftart */
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
+    background: #111;
+    color: #fff;
+    font-family: 'Consolas', 'Press Start 2P', monospace, sans-serif;
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-/* Überschriften */
-h1, h2 {
-  margin-bottom: 20px;
+.centered {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
-/* Startbildschirm Styles */
-#setupScreen {
-  max-width: 300px;
-  margin: auto;
-}
-#nameInputs {
-  margin: 10px 0;
-}
-#nameInputs input {
-  display: block;
-  width: 100%;
-  padding: 8px;
-  margin: 5px 0;
-  font-size: 1em;
-}
-#startGameBtn {
-  padding: 10px 20px;
-  font-size: 1.1em;
-  cursor: pointer;
+h1 {
+    font-size: 2em;
+    margin: 30px 0 18px 0;
+    color: #ffd900;
+    text-shadow: 1px 2px 0 #000, 0 0 13px #444a;
+    letter-spacing: 1px;
+    text-align: center;
 }
 
-/* Kategorie-Auswahl Styles */
-#categoryButtons {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
-  max-width: 400px;
-  margin: 0 auto;
-}
-#categoryButtons button {
-  flex: 1 1 40%;
-  /* Zwei Spalten auf größeren Displays, auf sehr kleinen evtl. 100% Breite */
-  padding: 10px;
-  margin: 5px;
-  font-size: 1em;
-  cursor: pointer;
-  border: 2px solid #333;
-  border-radius: 5px;
-  background: #fff;
+.setup-row {
+    margin: 12px 0 0 0;
+    font-size: 1.09em;
+    display: flex;
+    align-items: center;
+    gap: 14px;
 }
 
-/* Spielrunde Styles */
-.timer {
-  font-size: 2em;
-  font-weight: bold;
-  margin-bottom: 10px;
-}
-.word-display {
-  font-size: 2.5em;
-  font-weight: bold;
-  margin: 20px;
-  min-height: 1.5em;
-}
-#buttonsRow {
-  display: flex;
-  justify-content: space-around;
-  margin-top: 20px;
-}
-.game-btn {
-  flex: 0 1 45%;
-  font-size: 1.2em;
-  padding: 15px;
-  border: none;
-  border-radius: 8px;
-  color: #fff;
-  cursor: pointer;
-}
-.pass-btn {
-  background-color: #e53935;  /* Rot */
-}
-.next-btn {
-  background-color: #43a047;  /* Grün */
+#mainMenu {
+    margin-top: 36px;
 }
 
-/* Countdown-Anzeige */
-.countdown {
-  font-size: 4em;
-  font-weight: bold;
-  margin-top: 50px;
+#mainMenu input[type="color"] {
+    border: none;
+    width: 36px;
+    height: 28px;
+    border-radius: 6px;
+    cursor: pointer;
 }
 
-/* Zwischen- und Endbildschirme */
-#nextPlayerScreen, #resultScreen {
-  margin-top: 50px;
-}
-#scoreBoard {
-  text-align: left;
-  max-width: 300px;
-  margin: 0 auto 20px auto;
-}
-#scoreBoard p {
-  font-size: 1.2em;
-  margin: 5px;
-}
-/* Gewinner-Markierung */
-.winner {
-  font-weight: bold;
-  color: #d32f2f;
+#mainMenu select,
+#mainMenu option {
+    font-size: 1em;
+    border-radius: 6px;
+    border: 1.2px solid #bbb;
+    background: #222;
+    color: #ffd900;
+    padding: 4px 13px;
+    margin-left: 7px;
+    margin-right: 7px;
+    appearance: none;
 }
 
-/* Versteckt-Klasse für Screens */
-.hidden {
-  display: none;
+.highscore {
+    margin-top: 16px;
+    color: #11aaff;
+    font-weight: bold;
+    font-size: 1.08em;
 }
 
+#startBtn {
+    margin-top: 18px;
+    font-size: 1.16em;
+    background: #333;
+    color: #fff;
+    border: 1.7px solid #fff;
+    border-radius: 8px;
+    padding: 10px 32px;
+    cursor: pointer;
+    transition: background 0.13s;
+}
+#startBtn:hover {
+    background: #555;
+}
 
+#gameArea {
+    margin-top: 17px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#gameTopBar {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3px;
+    font-size: 1.14em;
+    min-height: 26px;
+}
+#levelDisplay {
+    color: #ffd900;
+    font-weight: bold;
+}
+#timerDisplay {
+    color: #ff4;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+#livesDisplay {
+    color: #e33;
+    font-weight: bold;
+}
+
+#mazeCanvas {
+    display: block;
+    background: #111;
+    border: 3.5px solid #fff;
+    border-radius: 15px;
+    margin: 8px 0;
+    box-shadow: 0 0 13px #000b;
+    image-rendering: pixelated;
+    max-width: 96vw;
+    max-height: 70vw;
+    touch-action: none;
+}
+
+#scoreRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 92%;
+    margin: 4px 0 10px 0;
+    font-size: 1.12em;
+    text-shadow: 0 2px 5px #000a;
+}
+#scoreRow span {
+    display: inline-block;
+    min-width: 97px;
+}
+#gameHighscore {
+    color: #11aaff;
+}
+
+#gameBtns {
+    display: flex;
+    gap: 13px;
+    justify-content: center;
+    margin-bottom: 8px;
+}
+
+#gameBtns button {
+    background: #232323;
+    color: #fff;
+    border: 1.5px solid #fff;
+    border-radius: 7px;
+    padding: 9px 22px;
+    font-size: 1.03em;
+    cursor: pointer;
+    transition: background 0.13s;
+}
+#gameBtns button:hover {
+    background: #333;
+}
+
+#joystickZone {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    margin-bottom: 13px;
+}
+#joystickOuter {
+    width: 86px;
+    height: 86px;
+    background: #292929;
+    border-radius: 50%;
+    border: 3px solid #fff;
+    box-shadow: 0 3px 14px #0007;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    touch-action: none;
+}
+#joystickThumb {
+    width: 38px;
+    height: 38px;
+    background: radial-gradient(circle at 13px 13px, #ffd900 68%, #333 100%);
+    border-radius: 50%;
+    border: 2px solid #fff;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -19px;
+    margin-top: -19px;
+    box-shadow: 0 1px 4px #000a;
+    transition: box-shadow 0.15s;
+    touch-action: none;
+}
+
+@media (max-width: 530px) {
+    h1 { font-size: 1.27em; }
+    #mazeCanvas {
+        max-width: 97vw;
+        max-height: 84vw;
+    }
+    #scoreRow { font-size: 0.97em; }
+    #gameBtns button { padding: 8px 14px; font-size: 1em; }
+    #joystickOuter { width: 69px; height: 69px; }
+    #joystickThumb { width: 27px; height: 27px; margin-left: -13.5px; margin-top: -13.5px;}
+}
+
+::-webkit-scrollbar { width: 0; }
