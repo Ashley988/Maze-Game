@@ -1,45 +1,57 @@
-<div id="mainMenu" class="centered">
-    <h1>Maze Mobile</h1>
-    <div class="setup-row">
-        <label>Farbe deiner Spielfigur:</label>
-        <input type="color" id="playerColor" value="#FFD700">
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Maze Mobile</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="mainMenu" class="centered">
+        <h1>Maze Mobile</h1>
+        <div class="setup-row">
+            <label>Farbe deiner Spielfigur:</label>
+            <input type="color" id="playerColor" value="#FFD700">
+        </div>
+        <div class="setup-row">
+            <label>Level auswählen:</label>
+            <select id="levelSelect"></select>
+            <span id="maxLevelInfo"></span>
+        </div>
+        <div class="setup-row">
+            <label>Zeitlimit:</label>
+            <select id="timeSelect"></select>
+        </div>
+        <div class="setup-row highscore">
+            <span>Highscore (höchstes Level): <span id="highscore">1</span></span>
+        </div>
+        <button id="startBtn">Spiel starten</button>
     </div>
-    <div class="setup-row">
-        <label>Level auswählen:</label>
-        <select id="levelSelect"></select>
-        <span id="maxLevelInfo"></span>
-    </div>
-    <div class="setup-row">
-        <label>Zeitlimit:</label>
-        <select id="timeSelect"></select>
-    </div>
-    <div class="setup-row highscore">
-        <span>Highscore (höchstes Level): <span id="highscore">1</span></span>
-    </div>
-    <button id="startBtn">Spiel starten</button>
-</div>
 
-<div id="gameArea" class="centered" style="display:none;">
-    <div id="gameTopBar">
-        <span id="levelDisplay"></span>
-        <span>
-            <label style="font-size: 0.98em;">Zeitlimit:</label>
-            <select id="gameTimeSelect"></select>
-        </span>
-        <span id="livesDisplay"></span>
-    </div>
-    <canvas id="mazeCanvas" width="420" height="420"></canvas>
-    <div id="scoreRow">
-        <span>Level: <span id="curLevelDisplay">1</span></span>
-        <span>Highscore: <span id="gameHighscore">1</span></span>
-    </div>
-    <div id="gameBtns">
-        <button id="restartBtn" style="display:none;">Play again</button>
-        <button id="menuBtn" style="display:none;">Zurück zum Menü</button>
-    </div>
-    <div id="joystickZone">
-        <div id="joystickOuter">
-            <div id="joystickThumb"></div>
+    <div id="gameArea" class="centered" style="display:none;">
+        <div id="gameTopBar">
+            <span id="levelDisplay"></span>
+            <span>
+                <label style="font-size: 0.98em;">Zeitlimit:</label>
+                <select id="gameTimeSelect"></select>
+            </span>
+            <span id="livesDisplay"></span>
+        </div>
+        <canvas id="mazeCanvas" width="420" height="420"></canvas>
+        <div id="scoreRow">
+            <span>Level: <span id="curLevelDisplay">1</span></span>
+            <span>Highscore: <span id="gameHighscore">1</span></span>
+        </div>
+        <div id="gameBtns">
+            <button id="restartBtn" style="display:none;">Play again</button>
+            <button id="menuBtn" style="display:none;">Zurück zum Menü</button>
+        </div>
+        <div id="joystickZone">
+            <div id="joystickOuter">
+                <div id="joystickThumb"></div>
+            </div>
         </div>
     </div>
-</div>
+    <script src="maze.js"></script>
+</body>
+</html>
