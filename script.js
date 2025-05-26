@@ -386,4 +386,58 @@ function movePlayer(dir){
     if(dir==="right") nx++;
     if(nx>=0 && ny>=0 && ny<maze.length && nx<maze[0].length && maze[ny][nx]!==0){
         player.x=nx; player.y=ny;
-        for(let e of enemies) if(e.x===nx&&e.y===ny
+        for(let e of enemies) if(e.x===nx&&e.y===ny&&e.alive){
+            if(lives>1){lives--;updateLives();failFlash();return;}
+            else {failLevel("Von Gegner gefangen!"); return;}
+        }
+        if(nx===exit.x && ny===exit.y){
+            saveProgress(curLevel+1);
+            setTimeout(()=>{
+                if(curLevel<TOTAL_LEVELS){
+                    curLevel++; startLevel(curLevel);
+                }else{
+                    alert("Alle Level geschafft!"); goToMenu();
+                }
+            }, 500);
+            return;
+        }
+        drawMaze();
+        moveCooldown=true;
+        setTimeout(()=>{moveCooldown=false;}, 140);
+    }
+}
+
+function failFlash(){
+    canvas.style.boxShadow="0 0 22px #f44";
+    setTimeout(()=>canvas.style.boxShadow="",220);
+}
+
+function failLevel(reason){
+    gameActive=false;
+    if(timerInterval) clearInterval(timerInterval);
+    restartBtn.style.display = "inline-block";
+    menuBtn.style.display = "inline-block";
+    alert(reason + " Versuch's nochmal!");
+}
+
+// === Zeitlimit Ingame-Änderung ===
+gameTimeSelect.addEventListener('change', function() {
+    timeLimit = +this.value;
+    timer = timeLimit;
+    updateTimer();
+    if (timerInterval) clearInterval(timerInterval);
+    if (timeLimit > 0 && gameActive) {
+        timerInterval = setInterval(() => {
+            if (!gameActive) return;
+            timer--;
+            updateTimer();
+            if (timer <= 0) failLevel("Zeit abgelaufen!");
+        }, 1000);
+    }
+});
+
+// === Initialisierung ===
+window.onload = function(){
+    loadProgress();
+    updateLevelSelect();
+};
