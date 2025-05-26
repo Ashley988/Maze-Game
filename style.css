@@ -1,212 +1,199 @@
-body {
+html, body {
     background: #111;
     color: #fff;
-    font-family: 'Consolas', 'Press Start 2P', monospace, sans-serif;
+    font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
     margin: 0;
+    padding: 0;
     min-height: 100vh;
+    box-sizing: border-box;
+}
+
+#mainMenu.active, #mainMenu {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+    width: 100vw;
 }
 
-.centered {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-h1 {
+h1, #curLevelInfo {
+    color: gold;
     font-size: 2em;
-    margin: 30px 0 18px 0;
-    color: #ffd900;
-    text-shadow: 1px 2px 0 #000, 0 0 13px #444a;
-    letter-spacing: 1px;
     text-align: center;
+    font-family: 'Fira Mono', monospace;
+    margin-top: 32px;
+    margin-bottom: 0.4em;
+    letter-spacing: 2px;
 }
 
-.setup-row {
-    margin: 12px 0 0 0;
-    font-size: 1.09em;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-}
-
-#mainMenu {
-    margin-top: 36px;
-}
-
-#mainMenu input[type="color"] {
-    border: none;
-    width: 36px;
-    height: 28px;
-    border-radius: 6px;
-    cursor: pointer;
-}
-
-#mainMenu select,
-#mainMenu option {
-    font-size: 1em;
-    border-radius: 6px;
-    border: 1.2px solid #bbb;
-    background: #222;
-    color: #ffd900;
-    padding: 4px 13px;
-    margin-left: 7px;
-    margin-right: 7px;
-    appearance: none;
-}
-
-.highscore {
-    margin-top: 16px;
-    color: #11aaff;
-    font-weight: bold;
-    font-size: 1.08em;
-}
-
-#startBtn {
-    margin-top: 18px;
-    font-size: 1.16em;
-    background: #333;
+label, select, #timerDisplay {
+    font-size: 1.2em;
+    margin: 0.4em;
     color: #fff;
-    border: 1.7px solid #fff;
-    border-radius: 8px;
-    padding: 10px 32px;
-    cursor: pointer;
-    transition: background 0.13s;
+    font-family: inherit;
+    background: transparent;
+    border: none;
+    outline: none;
 }
-#startBtn:hover {
-    background: #555;
+
+select {
+    background: #181818;
+    border: 1px solid #333;
+    border-radius: 8px;
+    color: #fff;
+    padding: 6px 16px;
+    margin-left: 0.5em;
 }
 
 #gameArea {
-    margin-top: 17px;
-    display: flex;
+    display: none;
     flex-direction: column;
     align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+    width: 100vw;
 }
 
-#gameTopBar {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 3px;
-    font-size: 1.14em;
-    min-height: 26px;
-}
-#levelDisplay {
-    color: #ffd900;
-    font-weight: bold;
-}
-#timerDisplay {
-    color: #ff4;
-    font-weight: bold;
-    letter-spacing: 1px;
-}
-#livesDisplay {
-    color: #e33;
-    font-weight: bold;
-}
-
-#mazeCanvas {
-    display: block;
+canvas#mazeCanvas {
+    margin: 18px 0 14px 0;
+    border-radius: 24px;
     background: #111;
-    border: 3.5px solid #fff;
-    border-radius: 15px;
-    margin: 8px 0;
-    box-shadow: 0 0 13px #000b;
-    image-rendering: pixelated;
-    max-width: 96vw;
-    max-height: 70vw;
-    touch-action: none;
+    border: 4px solid #fff;
+    display: block;
+    box-shadow: 0 8px 32px #000a;
+    transition: background 0.3s;
+    width: 95vw;
+    max-width: 420px;
+    max-height: 80vw;
+    aspect-ratio: 1 / 1;
 }
 
-#scoreRow {
+#highscoreDisplay {
+    font-size: 1.3em;
+    color: #00afff;
+    text-shadow: 0 1px 7px #0167, 0 0 2px #0099ff;
+    margin-left: 1em;
+    margin-bottom: 0.5em;
+}
+
+#highscore {
+    color: #00aaff;
+    font-weight: bold;
+}
+
+#curLevelInfo {
+    font-size: 1.7em;
+    color: gold;
+    margin-bottom: 0.4em;
+    margin-top: 16px;
+    letter-spacing: 1.5px;
+    text-shadow: 0 2px 4px #000c;
+}
+
+.menu-row {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    width: 92%;
-    margin: 4px 0 10px 0;
-    font-size: 1.12em;
-    text-shadow: 0 2px 5px #000a;
-}
-#scoreRow span {
-    display: inline-block;
-    min-width: 97px;
-}
-#gameHighscore {
-    color: #11aaff;
-}
-
-#gameBtns {
-    display: flex;
-    gap: 13px;
     justify-content: center;
-    margin-bottom: 8px;
+    margin-bottom: 1em;
+    flex-wrap: wrap;
 }
 
-#gameBtns button {
-    background: #232323;
-    color: #fff;
-    border: 1.5px solid #fff;
+#playerColor {
+    width: 42px;
+    height: 34px;
     border-radius: 7px;
-    padding: 9px 22px;
-    font-size: 1.03em;
-    cursor: pointer;
-    transition: background 0.13s;
-}
-#gameBtns button:hover {
-    background: #333;
+    border: 1.5px solid #fff;
+    vertical-align: middle;
+    background: #1a1a1a;
+    margin-left: 0.7em;
+    margin-right: 1em;
 }
 
-#joystickZone {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    margin-top: 10px;
-    margin-bottom: 13px;
+#timerDisplay {
+    color: #ff9;
+    font-size: 1.1em;
+    margin-left: 0.6em;
 }
+
+#startBtn, #restartBtn, #menuBtn {
+    margin: 1.2em 0.8em 0 0.8em;
+    padding: 10px 32px;
+    border-radius: 16px;
+    font-size: 1.25em;
+    font-family: inherit;
+    background: #0a2a44;
+    color: #fff;
+    border: none;
+    box-shadow: 0 3px 18px #0093ff40;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.2s, box-shadow 0.2s;
+    outline: none;
+}
+
+#startBtn:hover, #restartBtn:hover, #menuBtn:hover {
+    background: #1388e2;
+    box-shadow: 0 3px 24px #1388e244;
+}
+
 #joystickOuter {
-    width: 86px;
-    height: 86px;
-    background: #292929;
+    position: relative;
+    width: 90px;
+    height: 90px;
+    margin: 34px auto 0 auto;
+    background: #21232c;
     border-radius: 50%;
-    border: 3px solid #fff;
-    box-shadow: 0 3px 14px #0007;
+    border: 4px solid #fff;
     display: flex;
     align-items: center;
     justify-content: center;
-    position: relative;
+    box-shadow: 0 3px 14px #0092;
     touch-action: none;
+    z-index: 10;
 }
+
 #joystickThumb {
-    width: 38px;
-    height: 38px;
-    background: radial-gradient(circle at 13px 13px, #ffd900 68%, #333 100%);
+    width: 52px;
+    height: 52px;
+    background: radial-gradient(circle at 32px 12px, #ffe74d 70%, #bfa924 100%);
     border-radius: 50%;
-    border: 2px solid #fff;
+    border: 4px solid #fff;
     position: absolute;
-    left: 50%;
-    top: 50%;
-    margin-left: -19px;
-    margin-top: -19px;
-    box-shadow: 0 1px 4px #000a;
-    transition: box-shadow 0.15s;
-    touch-action: none;
+    top: 19px;
+    left: 19px;
+    box-shadow: 0 1px 9px #fff6, 0 2px 24px #ffe74d33;
+    transition: box-shadow 0.18s;
 }
 
-@media (max-width: 530px) {
-    h1 { font-size: 1.27em; }
-    #mazeCanvas {
-        max-width: 97vw;
-        max-height: 84vw;
+@media (max-width: 600px) {
+    html, body {
+        font-size: 16px;
     }
-    #scoreRow { font-size: 0.97em; }
-    #gameBtns button { padding: 8px 14px; font-size: 1em; }
-    #joystickOuter { width: 69px; height: 69px; }
-    #joystickThumb { width: 27px; height: 27px; margin-left: -13.5px; margin-top: -13.5px;}
+    canvas#mazeCanvas {
+        width: 98vw;
+        max-width: 360px;
+        min-width: 180px;
+        border-radius: 16px;
+    }
+    #joystickOuter {
+        width: 68px;
+        height: 68px;
+        margin: 22px auto 0 auto;
+    }
+    #joystickThumb {
+        width: 36px;
+        height: 36px;
+        top: 10px;
+        left: 10px;
+    }
+    h1, #curLevelInfo {
+        font-size: 1.22em;
+    }
+    #highscoreDisplay {
+        font-size: 1.08em;
+        margin-left: 0.3em;
+    }
 }
 
-::-webkit-scrollbar { width: 0; }
+::-webkit-scrollbar { display: none; }
