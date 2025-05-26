@@ -1,4 +1,4 @@
-// Maze Game - Komplettskript
+// Maze Game – Komplettskript
 
 // === Globale DOM-Elemente ===
 const canvas = document.getElementById("mazeCanvas");
@@ -23,7 +23,7 @@ const joystickOuter = document.getElementById("joystickOuter");
 const joystickThumb = document.getElementById("joystickThumb");
 
 // === Spielvariablen ===
-let player, exit, maze, enemies, lives, curLevel, timer, timeLimit, timerInterval;
+let player, exit, maze, enemies, lives, curLevel, timeLimit, timer, timeInterval;
 let gameActive = false, joystickDir = null;
 let highscore = 1, maxLevelUnlocked = 1;
 let joystickActive = false;
@@ -43,7 +43,7 @@ function fillTimeSelects() {
         select.appendChild(opt0);
         for (let t = 30; t <= 600; t += 15) {
             let min = Math.floor(t / 60), sec = t % 60;
-            let label = (min > 0 ? `${min}min ` : "") + (sec > 0 ? `${sec}s` : "");
+            let label = (min > 0 ? `${min}min ` : "") + `${sec > 0 ? sec + "s" : ""}`;
             let opt = document.createElement("option");
             opt.value = t;
             opt.textContent = label;
@@ -55,83 +55,56 @@ fillTimeSelects();
 
 // === Leveldaten und Generator ===
 const handLevels = [
+    // Level 1 (Beispiel, erweitere wie du willst)
     [
         [0,0,0,0,0],
-        [0,2,1,1,0],
+        [0,2,1,3,0],
         [0,1,0,1,0],
-        [0,1,3,1,0],
-        [0,0,0,0,0],
+        [0,1,0,1,0],
+        [0,0,0,0,0]
     ],
+    // Level 2+
     [
         [0,0,0,0,0,0,0],
         [0,2,1,1,1,3,0],
+        [0,1,0,0,0,1,0],
         [0,1,0,1,0,1,0],
-        [0,1,0,1,0,1,0],
-        [0,1,1,1,1,1,0],
-        [0,0,0,1,0,0,0],
-        [0,0,0,0,0,0,0],
+        [0,1,1,1,0,1,0],
+        [0,0,0,0,0,0,0]
     ],
+    // Level 3+
     [
         [0,0,0,0,0,0,0,0],
         [0,2,1,1,1,1,3,0],
-        [0,1,0,0,0,1,0,0],
-        [0,1,0,4,0,1,1,0],
-        [0,1,1,1,1,0,1,0],
-        [0,0,0,0,1,0,1,0],
+        [0,1,0,0,0,0,1,0],
+        [0,1,0,1,1,0,1,0],
+        [0,1,0,0,1,0,1,0],
         [0,1,1,1,1,1,1,0],
-        [0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0]
     ],
-    [
-        [0,0,0,0,0,0,0,0,0,0],
-        [0,2,1,1,0,1,1,1,3,0],
-        [0,1,0,1,0,1,0,1,1,0],
-        [0,1,0,1,0,1,0,1,0,0],
-        [0,1,0,1,0,1,0,1,0,0],
-        [0,1,1,1,4,1,0,1,1,0],
-        [0,0,0,0,0,0,0,0,0,0],
-        [0,0,1,1,1,1,1,1,0,0],
-        [0,0,1,0,0,0,0,1,0,0],
-        [0,0,0,0,0,0,0,0,0,0],
-    ],
-    [
-        [0,0,0,0,0,0,0,0,0,0,0],
-        [0,2,1,1,0,1,1,1,1,3,0],
-        [0,1,0,1,0,1,0,0,1,1,0],
-        [0,1,0,1,0,1,0,1,0,1,0],
-        [0,1,0,1,0,1,0,1,0,1,0],
-        [0,1,1,1,4,1,0,1,1,1,0],
-        [0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,1,1,1,1,1,1,1,0,0],
-        [0,0,1,0,0,0,0,1,1,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0],
-    ]
+    // usw. ... 
 ];
-
+// Automatische Generierung weiterer Labyrinthe für höhere Level (größer, schwieriger)
 function makeLevel(n) {
     if (n <= handLevels.length) return handLevels[n - 1];
-    let size = Math.min(7 + Math.floor(n / 2), 23);
+    let size = Math.min(7 + Math.floor(n / 5), 21);
     let maze = Array(size).fill().map(() => Array(size).fill(0));
-    for (let y = 1; y < size - 1; y++)
-        for (let x = 1; x < size - 1; x++) maze[y][x] = 1;
+    for (let y = 1; y < size - 1; y++) for (let x = 1; x < size - 1; x++) maze[y][x] = 1;
     maze[1][1] = 2; // Player
     maze[size - 2][size - 2] = 3; // Exit
-    for (let i = 0; i < size - 2; i++) maze[1 + i][1 + i] = 1;
     for (let i = 0; i < size * 1.8; i++) {
-        let x = Math.floor(Math.random() * (size - 4)) + 2;
-        let y = Math.floor(Math.random() * (size - 4)) + 2;
-        if ((x !== 1 || y !== 1) && (x !== size - 2 || y !== size - 2)) {
-            maze[y][x] = 0;
-        }
+        let x = Math.floor(Math.random() * (size - 2)) + 1;
+        let y = Math.floor(Math.random() * (size - 2)) + 1;
+        if ((x !== 1 || y !== 1) && (x !== size - 2 || y !== size - 2)) maze[y][x] = 0;
     }
-    let gcount = Math.min(Math.floor(1 + n / 7), 8);
+    let gcount = Math.min(Math.floor(1 + n / 8), 3);
     for (let g = 0; g < gcount; g++) {
         let tries = 0;
         while (tries++ < 40) {
-            let gx = Math.floor(Math.random() * (size - 4)) + 2;
-            let gy = Math.floor(Math.random() * (size - 4)) + 2;
+            let gx = Math.floor(Math.random() * (size - 2)) + 1;
+            let gy = Math.floor(Math.random() * (size - 2)) + 1;
             if (maze[gy][gx] === 1 && !(gx === 1 && gy === 1) && !(gx === size - 2 && gy === size - 2)) {
-                maze[gy][gx] = 4;
+                maze[gy][gx] = 4; // Gegner
                 break;
             }
         }
@@ -147,8 +120,8 @@ function getLevel(n) {
 
 // === Highscore speichern/laden ===
 function loadProgress() {
-    highscore = +(localStorage.getItem('mazeHighscore')||1);
-    maxLevelUnlocked = +(localStorage.getItem('mazeMaxLevel')||1);
+    highscore = +(localStorage.getItem('mazeHighscore') || 1);
+    maxLevelUnlocked = +(localStorage.getItem('mazeMaxLevel') || 1);
     if (maxLevelUnlocked < 1) maxLevelUnlocked = 1;
     updateHighscore();
 }
@@ -164,9 +137,9 @@ function saveProgress(level) {
     updateHighscore();
 }
 function updateHighscore() {
-    highscoreSpan.textContent = highscore;
-    gameHighscoreSpan.textContent = highscore;
-    maxLevelInfo.textContent = `(bis Level ${maxLevelUnlocked})`;
+    if (highscoreSpan) highscoreSpan.textContent = highscore;
+    if (gameHighscoreSpan) gameHighscoreSpan.textContent = highscore;
+    if (maxLevelInfo) maxLevelInfo.textContent = `(bis Level ${maxLevelUnlocked})`;
 }
 
 // === Level Dropdown vorbereiten ===
@@ -206,8 +179,8 @@ function startLevel(level) {
     // Spielfigur & Exit finden
     let foundPlayer = false, foundExit = false;
     for (let y = 0; y < n; y++) for (let x = 0; x < m; x++) {
-        if (maze[y][x] === 2) { player = { x, y }; foundPlayer = true; }
-        if (maze[y][x] === 3) { exit = { x, y }; foundExit = true; }
+        if (maze[y][x] === 2) { player = {x, y, color: playerColorInput.value}; foundPlayer = true; }
+        if (maze[y][x] === 3) { exit = {x, y}; foundExit = true; }
     }
     if (!foundPlayer || !foundExit) {
         alert("Level-Fehler: Spieler oder Ausgang fehlt!");
@@ -215,26 +188,21 @@ function startLevel(level) {
     }
     enemies = [];
     for (let y = 0; y < n; y++) for (let x = 0; x < m; x++) {
-        if (maze[y][x] === 4)
-            enemies.push({
-                x, y,
-                dir: (level >= 4 ? "v" : "h"),
-                t: 0, alive: true
-            });
+        if (maze[y][x] === 4) enemies.push({x, y, dir: (level >= 4 ? "v" : "h"), t: 0, alive: true});
     }
     lives = (enemies.length > 0) ? 3 : "";
     levelDisplay.textContent = `Level ${level}`;
     curLevelDisplay.textContent = level;
     updateLives();
-    // Zeitlimit synchronisieren (Menü → Ingame-Dropdown)
+    // Zeitlimit synchronisieren (Menü → Ingame)
     let selected = timeSelect.value;
     gameTimeSelect.value = selected;
     timeLimit = +selected;
     timer = timeLimit;
     updateTimer();
-    if (timerInterval) clearInterval(timerInterval);
+    if (timeInterval) clearInterval(timeInterval);
     if (timeLimit > 0) {
-        timerInterval = setInterval(() => {
+        timeInterval = setInterval(() => {
             if (!gameActive) return;
             timer--;
             updateTimer();
@@ -252,10 +220,14 @@ function startLevel(level) {
 
 // === Lives/Timer Update ===
 function updateLives() {
-    livesDisplay.textContent = lives ? `Leben: ${lives}` : "";
+    if (livesDisplay) {
+        livesDisplay.textContent = lives ? `Leben: ${lives}` : "";
+    }
 }
 function updateTimer() {
-    timerDisplay.textContent = (timeLimit > 0 ? `Zeit: ${timer}s` : "");
+    if (timerDisplay) {
+        timerDisplay.textContent = (timeLimit > 0 ? `Zeit: ${timer}s` : "");
+    }
 }
 
 // === Maze Rendering ===
@@ -316,12 +288,12 @@ function gameLoop() {
 function moveEnemies() {
     for(let e of enemies){
         if(!e.alive) continue;
-        if(e.dir==="h" && (performance.now()/430)%1<0.5){
+        if(e.dir==="h" && (performance.now()/350|0)%2===0){
             let nx=e.x+1, px=e.x-1;
             if(nx<maze[0].length && maze[e.y][nx]!==0) e.x=nx;
             else if(px>=0 && maze[e.y][px]!==0) e.x=px;
         }
-        if(e.dir==="v" && (performance.now()/530)%1<0.5){
+        if(e.dir==="v" && (performance.now()/350|0)%2===0){
             let ny=e.y+1, py=e.y-1;
             if(ny<maze.length && maze[ny][e.x]!==0) e.y=ny;
             else if(py>=0 && maze[py][e.x]!==0) e.y=py;
@@ -342,6 +314,7 @@ function joystickStart(e) {
     document.addEventListener("mouseup", joystickEnd);
     document.addEventListener("touchend", joystickEnd);
 }
+
 function joystickEnd() {
     joystickActive = false;
     joystickDir = null;
@@ -351,6 +324,7 @@ function joystickEnd() {
     document.removeEventListener("mouseup", joystickEnd);
     document.removeEventListener("touchend", joystickEnd);
 }
+
 function updateJoystick(e) {
     let rect = joystickOuter.getBoundingClientRect();
     let cx = rect.left + rect.width/2, cy = rect.top + rect.height/2;
@@ -362,16 +336,14 @@ function updateJoystick(e) {
     }
     let dx = x-cx, dy = y-cy, dist = Math.sqrt(dx*dx+dy*dy);
     let max = rect.width/2-18;
-    if(dist > max){
-        dx = dx*max/dist; dy = dy*max/dist;
-    }
+    if(dist > max){ dx = dx*max/dist; dy = dy*max/dist; }
     joystickThumb.style.transform = `translate(${dx}px,${dy}px)`;
     let angle = Math.atan2(dy, dx);
     if(dist>18){
-        if(angle>-Math.PI*0.75 && angle<-Math.PI*0.25) joystickDir="up";
-        else if(angle>-Math.PI*0.25 && angle<Math.PI*0.25) joystickDir="right";
-        else if(angle>Math.PI*0.25 && angle<Math.PI*0.75) joystickDir="down";
-        else joystickDir="left";
+        if(angle<-Math.PI*0.75 || angle>Math.PI*0.75) joystickDir="left";
+        else if(angle<-Math.PI*0.25 && angle>-Math.PI*0.75) joystickDir="up";
+        else if(angle<Math.PI*0.25 && angle>-Math.PI*0.25) joystickDir="right";
+        else if(angle<Math.PI*0.75 && angle>Math.PI*0.25) joystickDir="down";
         movePlayer(joystickDir);
     }
 }
@@ -386,9 +358,9 @@ function movePlayer(dir){
     if(dir==="right") nx++;
     if(nx>=0 && ny>=0 && ny<maze.length && nx<maze[0].length && maze[ny][nx]!==0){
         player.x=nx; player.y=ny;
-        for(let e of enemies) if(e.x===nx&&e.y===ny&&e.alive){
-            if(lives>1){lives--;updateLives();failFlash();return;}
-            else {failLevel("Von Gegner gefangen!"); return;}
+        for(let e of enemies) if(e.x===nx&&e.y===ny){
+            if(lives>1){lives--;updateLives();failFlash();}
+            else {failLevel("Von Gegner gefangen!");}
         }
         if(nx===exit.x && ny===exit.y){
             saveProgress(curLevel+1);
@@ -396,38 +368,38 @@ function movePlayer(dir){
                 if(curLevel<TOTAL_LEVELS){
                     curLevel++; startLevel(curLevel);
                 }else{
-                    alert("Alle Level geschafft!"); goToMenu();
+                    alert("Alle Level geschafft!");
                 }
             }, 500);
             return;
         }
-        drawMaze();
-        moveCooldown=true;
-        setTimeout(()=>{moveCooldown=false;}, 140);
     }
+    drawMaze();
+    moveCooldown=true;
+    setTimeout(()=>{moveCooldown=false;}, 150);
 }
 
 function failFlash(){
     canvas.style.boxShadow="0 0 22px #f44";
-    setTimeout(()=>canvas.style.boxShadow="",220);
+    setTimeout(()=>canvas.style.boxShadow="",200);
 }
 
 function failLevel(reason){
     gameActive=false;
-    if(timerInterval) clearInterval(timerInterval);
+    if(timeInterval) clearInterval(timeInterval);
     restartBtn.style.display = "inline-block";
     menuBtn.style.display = "inline-block";
     alert(reason + " Versuch's nochmal!");
 }
 
 // === Zeitlimit Ingame-Änderung ===
-gameTimeSelect.addEventListener('change', function() {
+gameTimeSelect.addEventListener('change', function(){
     timeLimit = +this.value;
     timer = timeLimit;
     updateTimer();
-    if (timerInterval) clearInterval(timerInterval);
+    if (timeInterval) clearInterval(timeInterval);
     if (timeLimit > 0 && gameActive) {
-        timerInterval = setInterval(() => {
+        timeInterval = setInterval(() => {
             if (!gameActive) return;
             timer--;
             updateTimer();
