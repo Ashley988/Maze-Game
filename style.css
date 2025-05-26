@@ -1,139 +1,109 @@
+/* maze.css */
+
 body {
-  background: #111;
-  color: #fff;
-  font-family: 'Fira Mono', 'Consolas', monospace;
-  margin: 0;
-  padding: 0;
-  text-align: center;
+    background: #141414;
+    color: #eee;
+    font-family: 'Fira Mono', 'Consolas', 'Monaco', monospace;
+    margin: 0;
+    min-height: 100vh;
 }
 
 h1 {
-  color: #ffe100;
-  font-family: 'Fira Mono', 'Consolas', monospace;
-  font-size: 2.3rem;
-  margin: 2rem 0 1.5rem 0;
-  letter-spacing: 2px;
+    font-size: 2em;
+    font-family: 'Fira Mono', 'Consolas', 'Monaco', monospace;
+    color: #FFD600;
+    text-align: center;
+    margin-top: 24px;
+    letter-spacing: 1.5px;
 }
 
-#mainMenu {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 2.2rem;
+label {
+    font-size: 1.05em;
+    margin-right: 8px;
 }
 
-#mainMenu label {
-  font-size: 1.3rem;
-  margin: 0.6rem 0.2rem;
-  letter-spacing: 2px;
-  display: inline-block;
+input[type="color"] {
+    vertical-align: middle;
+    border: 2px solid #FFD600;
+    border-radius: 50%;
+    background: #222;
+    cursor: pointer;
 }
 
-select, #playerColorInput {
-  font-size: 1.2rem;
-  margin-left: 0.5em;
-  border-radius: 10px;
-  border: 2px solid #666;
-  padding: 0.2em 0.7em;
-  background: #222;
-  color: #ffe100;
+#mainMenu, #gameArea {
+    max-width: 350px;
+    margin: auto;
+    margin-top: 32px;
+    background: rgba(20,20,20,0.97);
+    border-radius: 16px;
+    padding: 22px 20px 30px 20px;
+    box-shadow: 0 0 16px #000a;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-#startBtn, #restartBtn, #menuBtn {
-  margin: 2rem 0 1.2rem 0;
-  padding: 0.9em 2.2em;
-  font-size: 1.2rem;
-  font-family: inherit;
-  border-radius: 12px;
-  background: #888;
-  color: #fff;
-  border: none;
-  cursor: pointer;
-  box-shadow: 0 3px 10px #0008;
-  transition: background 0.2s;
+select, button {
+    font-family: inherit;
+    font-size: 1em;
+    border-radius: 8px;
+    border: none;
+    padding: 6px 16px;
+    margin-left: 6px;
 }
 
-#startBtn:hover, #restartBtn:hover, #menuBtn:hover {
-  background: #ffe100;
-  color: #111;
+select {
+    background: #232323;
+    color: #FFD600;
+    border: 2px solid #FFD600;
 }
 
-#highscoreSpan, #gameHighscoreSpan {
-  color: #2ca4ff;
-  font-size: 1.25rem;
-  margin-left: 0.5em;
-  letter-spacing: 1px;
+button {
+    background: #333;
+    color: #FFD600;
+    border: 2px solid #FFD600;
+    margin-top: 10px;
+    transition: background 0.2s, color 0.2s;
+    cursor: pointer;
 }
 
-#gameArea {
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  margin-top: 0.8em;
+button:hover, select:hover {
+    background: #FFD600;
+    color: #111;
 }
 
 #mazeCanvas {
-  display: block;
-  background: #111;
-  border: 5px solid #fff;
-  border-radius: 20px;
-  margin: 1.2em auto 1.5em auto;
-  box-shadow: 0 8px 32px #0007;
+    display: block;
+    background: #111;
+    border: 4px solid #fff;
+    border-radius: 18px;
+    margin: 20px auto 10px auto;
+    box-shadow: 0 0 14px #0007;
 }
 
-#levelDisplay, #timerDisplay, #livesDisplay {
-  font-size: 1.25rem;
-  margin: 0.5em 0.7em;
-  letter-spacing: 2px;
-  display: inline-block;
+#timerDisplay {
+    font-size: 1.22em;
+    color: #FFD600;
+    letter-spacing: 1px;
+    text-shadow: 1px 1px 4px #222;
 }
 
-#controls {
-  margin: 2.2em auto 0.5em auto;
-  display: flex;
-  justify-content: center;
+#highscore {
+    color: #03A9F4;
+    font-weight: bold;
+    font-size: 1.12em;
+    padding-left: 3px;
 }
 
-#joystickOuter {
-  width: 95px;
-  height: 95px;
-  border: 5px solid #fff;
-  border-radius: 50%;
-  background: #222;
-  margin: 1.1em auto 1em auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  box-shadow: 0 6px 18px #0006;
-  touch-action: none;
-  user-select: none;
-}
-
-#joystickThumb {
-  width: 48px;
-  height: 48px;
-  background: #ffe100;
-  border-radius: 50%;
-  border: 5px solid #fff;
-  box-shadow: 0 2px 7px #0005;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%,-50%);
-  transition: box-shadow 0.15s;
-}
-
-@media (max-width: 600px) {
-  #mazeCanvas {
-    width: 94vw !important;
-    height: 94vw !important;
-    max-width: 380px !important;
-    max-height: 380px !important;
-  }
-  #joystickOuter { width: 82px; height: 82px; }
-  #joystickThumb { width: 38px; height: 38px; }
-  h1 { font-size: 1.55rem; }
-  #mainMenu, #gameArea { margin-top: 1.2em; }
+@media (max-width: 500px) {
+    #mainMenu, #gameArea {
+        max-width: 97vw;
+        padding: 10px 2vw 18px 2vw;
+    }
+    #mazeCanvas {
+        width: 92vw !important;
+        height: 92vw !important;
+        max-width: 98vw;
+        max-height: 98vw;
+    }
 }
