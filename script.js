@@ -1,4 +1,6 @@
-// ========== Globale Referenzen ==========
+// Maze Game - Komplettskript
+
+// === Globale DOM-Elemente ===
 const canvas = document.getElementById("mazeCanvas");
 const ctx = canvas.getContext("2d");
 const mainMenu = document.getElementById("mainMenu");
@@ -20,7 +22,7 @@ const livesDisplay = document.getElementById("livesDisplay");
 const joystickOuter = document.getElementById("joystickOuter");
 const joystickThumb = document.getElementById("joystickThumb");
 
-// ========== Spielvariablen ==========
+// === Spielvariablen ===
 let player, exit, maze, enemies, lives, curLevel, timer, timeLimit, timerInterval;
 let gameActive = false, joystickDir = null;
 let highscore = 1, maxLevelUnlocked = 1;
@@ -30,7 +32,7 @@ let moveCooldown = false;
 
 const TOTAL_LEVELS = 100;
 
-// ========== Zeitlimit-Dropdowns füllen ==========
+// === Zeitlimit-Dropdowns füllen ===
 function fillTimeSelects() {
     let selects = [timeSelect, gameTimeSelect];
     for (let select of selects) {
@@ -51,7 +53,7 @@ function fillTimeSelects() {
 }
 fillTimeSelects();
 
-// ========== Leveldaten und Generator ==========
+// === Leveldaten und Generator ===
 const handLevels = [
     [
         [0,0,0,0,0],
@@ -143,7 +145,7 @@ function getLevel(n) {
     return makeLevel(n);
 }
 
-// ========== Highscore speichern/laden ==========
+// === Highscore speichern/laden ===
 function loadProgress() {
     highscore = +(localStorage.getItem('mazeHighscore')||1);
     maxLevelUnlocked = +(localStorage.getItem('mazeMaxLevel')||1);
@@ -167,7 +169,7 @@ function updateHighscore() {
     maxLevelInfo.textContent = `(bis Level ${maxLevelUnlocked})`;
 }
 
-// ========== Level Dropdown vorbereiten ==========
+// === Level Dropdown vorbereiten ===
 function updateLevelSelect() {
     levelSelect.innerHTML = "";
     let max = Math.min(TOTAL_LEVELS, maxLevelUnlocked);
@@ -179,7 +181,7 @@ function updateLevelSelect() {
     }
 }
 
-// ========== Spielstart ==========
+// === Spielstart ===
 startBtn.onclick = () => {
     curLevel = +levelSelect.value;
     startLevel(curLevel);
@@ -195,15 +197,21 @@ function goToMenu() {
     updateLevelSelect();
 }
 
-// ========== Level laden ==========
+// === Level laden ===
 function startLevel(level) {
     maze = getLevel(level);
     let n = maze.length, m = maze[0].length;
     canvas.width = m * cellSizeBase;
     canvas.height = n * cellSizeBase;
+    // Spielfigur & Exit finden
+    let foundPlayer = false, foundExit = false;
     for (let y = 0; y < n; y++) for (let x = 0; x < m; x++) {
-        if (maze[y][x] === 2) player = { x, y };
-        if (maze[y][x] === 3) exit = { x, y };
+        if (maze[y][x] === 2) { player = { x, y }; foundPlayer = true; }
+        if (maze[y][x] === 3) { exit = { x, y }; foundExit = true; }
+    }
+    if (!foundPlayer || !foundExit) {
+        alert("Level-Fehler: Spieler oder Ausgang fehlt!");
+        return;
     }
     enemies = [];
     for (let y = 0; y < n; y++) for (let x = 0; x < m; x++) {
@@ -242,7 +250,7 @@ function startLevel(level) {
     requestAnimationFrame(gameLoop);
 }
 
-// ========== Lives/Timer Update ==========
+// === Lives/Timer Update ===
 function updateLives() {
     livesDisplay.textContent = lives ? `Leben: ${lives}` : "";
 }
@@ -250,7 +258,7 @@ function updateTimer() {
     timerDisplay.textContent = (timeLimit > 0 ? `Zeit: ${timer}s` : "");
 }
 
-// ========== Maze Rendering ==========
+// === Maze Rendering ===
 function drawMaze() {
     ctx.fillStyle = "#111";
     ctx.fillRect(0,0,canvas.width,canvas.height);
@@ -296,7 +304,7 @@ function drawMaze() {
     ctx.stroke();
 }
 
-// ========== Game Loop ==========
+// === Game Loop ===
 function gameLoop() {
     if(!gameActive) return;
     moveEnemies();
@@ -304,7 +312,7 @@ function gameLoop() {
     requestAnimationFrame(gameLoop);
 }
 
-// ========== Gegner bewegen ==========
+// === Gegner bewegen ===
 function moveEnemies() {
     for(let e of enemies){
         if(!e.alive) continue;
@@ -315,13 +323,13 @@ function moveEnemies() {
         }
         if(e.dir==="v" && (performance.now()/530)%1<0.5){
             let ny=e.y+1, py=e.y-1;
-            if(ny<maze.length && maze[py][e.x]!==0 && Math.random() > 0.2) e.y=py;
-            else if(ny<maze.length && maze[ny][e.x]!==0) e.y=ny;
+            if(ny<maze.length && maze[ny][e.x]!==0) e.y=ny;
+            else if(py>=0 && maze[py][e.x]!==0) e.y=py;
         }
     }
 }
 
-// ========== Joystick Steuerung ==========
+// === Joystick Steuerung ===
 joystickOuter.addEventListener("touchstart", joystickStart);
 joystickOuter.addEventListener("mousedown", joystickStart);
 
@@ -368,7 +376,7 @@ function updateJoystick(e) {
     }
 }
 
-// ========== Spieler-Bewegung ==========
+// === Spieler-Bewegung ===
 function movePlayer(dir){
     if(moveCooldown) return;
     let nx=player.x, ny=player.y;
@@ -378,58 +386,4 @@ function movePlayer(dir){
     if(dir==="right") nx++;
     if(nx>=0 && ny>=0 && ny<maze.length && nx<maze[0].length && maze[ny][nx]!==0){
         player.x=nx; player.y=ny;
-        for(let e of enemies) if(e.x===nx&&e.y===ny&&e.alive){
-            if(lives>1){lives--;updateLives();failFlash();return;}
-            else {failLevel("Von Gegner gefangen!"); return;}
-        }
-        if(nx===exit.x && ny===exit.y){
-            saveProgress(curLevel+1);
-            setTimeout(()=>{
-                if(curLevel<TOTAL_LEVELS){
-                    curLevel++; startLevel(curLevel);
-                }else{
-                    alert("Alle Level geschafft!"); goToMenu();
-                }
-            }, 500);
-            return;
-        }
-        drawMaze();
-        moveCooldown=true;
-        setTimeout(()=>{moveCooldown=false;}, 140);
-    }
-}
-
-function failFlash(){
-    canvas.style.boxShadow="0 0 22px #f44";
-    setTimeout(()=>canvas.style.boxShadow="",220);
-}
-
-function failLevel(reason){
-    gameActive=false;
-    if(timerInterval) clearInterval(timerInterval);
-    restartBtn.style.display = "inline-block";
-    menuBtn.style.display = "inline-block";
-    alert(reason + " Versuch's nochmal!");
-}
-
-// ========== Zeitlimit Ingame-Änderung ==========
-gameTimeSelect.addEventListener('change', function() {
-    timeLimit = +this.value;
-    timer = timeLimit;
-    updateTimer();
-    if (timerInterval) clearInterval(timerInterval);
-    if (timeLimit > 0 && gameActive) {
-        timerInterval = setInterval(() => {
-            if (!gameActive) return;
-            timer--;
-            updateTimer();
-            if (timer <= 0) failLevel("Zeit abgelaufen!");
-        }, 1000);
-    }
-});
-
-// ========== Initialisierung ==========
-window.onload = function(){
-    loadProgress();
-    updateLevelSelect();
-};
+        for(let e of enemies) if(e.x===nx&&e.y===ny
