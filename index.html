@@ -2,51 +2,53 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <title>Aslis Maze Game</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aslis Maze Game</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1 class="game-title">Aslis Maze Game</h1>
-    <div id="mainMenu" class="menu active">
-        <div>
-            <label for="playerColor">Spielfarbe:</label>
-            <select id="playerColor">
+    <h1 class="main-title">Aslis Maze Game</h1>
+    <div id="mainMenu" class="menu">
+        <label>Spielfarbe: 
+            <select id="playerColorInput">
                 <option value="#FFD700">Gelb</option>
-                <option value="#00bfff">Blau</option>
-                <option value="#ff22ff">Lila</option>
-                <option value="#00ff66">Grün</option>
-                <option value="#ff4444">Rot</option>
+                <option value="#00BFFF">Blau</option>
+                <option value="#FF69B4">Pink</option>
+                <option value="#00FF7F">Grün</option>
+                <option value="#FFFFFF">Weiß</option>
             </select>
-        </div>
-        <div>
-            <label for="levelSelect">Level:</label>
+        </label>
+        <br>
+        <label>Level:
             <select id="levelSelect"></select>
-        </div>
-        <div>
-            <label for="timeLimitSelect">Zeitlimit:</label>
-            <select id="timeLimitSelect">
-                <option value="0">Kein Limit</option>
-            </select>
-        </div>
-        <div class="highscoreInfo">
-            Highscore: <span id="highscore">1</span>
-        </div>
+        </label>
+        <br>
+        <label>Zeitlimit:
+            <select id="timeSelect"></select>
+        </label>
+        <br>
+        <span>Highscore: <span id="highscoreSpan">1</span></span>
+        <br><br>
         <button id="startBtn">Spiel starten</button>
     </div>
-    <div id="gameArea" class="game-area">
-        <div class="infoBar">
-            <span id="curLevelInfo"></span>
+
+    <div id="gameArea" style="display:none;">
+        <div class="game-header">
+            <span id="levelDisplay"></span>
             <span id="timerDisplay"></span>
-            <span id="highscoreDisplay"></span>
+            <span id="gameHighscoreSpan"></span>
         </div>
         <canvas id="mazeCanvas" width="320" height="320"></canvas>
-        <div class="controller-outer" id="joystickOuter">
-            <div class="controller-thumb" id="joystickThumb"></div>
+        <div class="game-footer">
+            <span id="livesDisplay"></span>
         </div>
-        <button id="menuBtn" class="menuBtn">Zurück zum Menü</button>
-        <button id="restartBtn" class="restartBtn">Nochmal spielen</button>
+        <div id="joystickOuter">
+            <div id="joystickThumb"></div>
+        </div>
+        <button id="menuBtn">Zurück zum Menü</button>
+        <button id="restartBtn" style="display:none;">Nochmal versuchen</button>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>
